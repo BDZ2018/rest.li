@@ -52,6 +52,8 @@ public class AsyncPoolStatsTracker
   private int _totalDestroyErrors = 0;
   private int _totalBadDestroyed = 0;
   private int _totalTimedOut = 0;
+  private int _totalCreationIgnored = 0;
+
 
   /**
    * These counters are sampled and reset based on sampling rules
@@ -116,6 +118,11 @@ public class AsyncPoolStatsTracker
   public void incrementCreated()
   {
     _totalCreated++;
+  }
+
+  public void incrementIgnoredCreation()
+  {
+    _totalCreationIgnored++;
   }
 
   public void incrementDestroyed()
@@ -187,6 +194,7 @@ public class AsyncPoolStatsTracker
         _totalDestroyErrors,
         _totalBadDestroyed,
         _totalTimedOut,
+        _totalCreationIgnored,
         _checkedOutSupplier.get(),
         _maxSizeSupplier.get(),
         _minSizeSupplier.get(),

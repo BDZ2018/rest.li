@@ -57,6 +57,11 @@ public interface RateLimiter
    */
   Collection<Task> cancelPendingTasks();
 
+  default int numberOfPendingTasks()
+  {
+    return -1;
+  }
+
   /**
    * The minimum scheduling unit to apply rate-limiting logic.
    */

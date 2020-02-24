@@ -601,6 +601,25 @@ public class AsyncPoolImpl<T> implements AsyncPool<T>
       @Override
       public void run(final SimpleCallback callback)
       {
+        boolean shouldIgnore;
+        synchronized (_lock) {
+          // Ignore the object creation if no one is waiting for the object and the pool already has _minSize objects
+          int totalObjects = _checkedOut + _idle.size();
+          shouldIgnore = _waiters.size() == 0 && totalObjects >= _minSize;
+          if (shouldIgnore) {
+            _statsTracker.incrementIgnoredCreation();
+            if (_poolSize >= 1)
+            {
+              _poolSize--;
+            }
+          }
+        }
+
+        if (shouldIgnore) {
+          callback.onDone();
+          return;
+        }
+
         _lifecycle.create(new Callback<T>()
         {
           @Override

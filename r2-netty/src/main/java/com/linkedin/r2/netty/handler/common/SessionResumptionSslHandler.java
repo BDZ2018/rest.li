@@ -24,6 +24,7 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslHandler;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 
@@ -46,6 +47,7 @@ import javax.net.ssl.SSLParameters;
 public class SessionResumptionSslHandler extends ChannelOutboundHandlerAdapter
 {
   public static final String PIPELINE_SESSION_RESUMPTION_HANDLER = "SessionResumptionSslHandler";
+  private static final int DEFAULT_SSL_HANDSHAKE_TIMEOUT = 1000;
 
   private final SslHandlerGenerator _hostPortToSslHandler;
 
@@ -76,6 +78,7 @@ public class SessionResumptionSslHandler extends ChannelOutboundHandlerAdapter
   {
     final InetSocketAddress address = ((InetSocketAddress) remoteAddress);
     final SslHandler sslHandler = _hostPortToSslHandler.create(ctx, address.getHostName(), address.getPort());
+    sslHandler.setHandshakeTimeout(DEFAULT_SSL_HANDSHAKE_TIMEOUT, TimeUnit.MILLISECONDS);
 
     ctx.pipeline().addAfter(PIPELINE_SESSION_RESUMPTION_HANDLER, SslHandlerUtil.PIPELINE_SSL_HANDLER, sslHandler);
     ctx.pipeline().addAfter(SslHandlerUtil.PIPELINE_SSL_HANDLER, SslHandshakeTimingHandler.SSL_HANDSHAKE_TIMING_HANDLER,

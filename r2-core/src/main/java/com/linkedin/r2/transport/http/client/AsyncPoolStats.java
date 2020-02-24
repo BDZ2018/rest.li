@@ -36,6 +36,7 @@ public class AsyncPoolStats implements PoolStats
   private final int _totalDestroyErrors;
   private final int _totalBadDestroyed;
   private final int _totalTimedOut;
+  private final int _totalCreationIgnored;
 
   private final int _checkedOut;
   private final int _maxPoolSize;
@@ -64,6 +65,7 @@ public class AsyncPoolStats implements PoolStats
       int totalDestroyErrors,
       int totalBadDestroyed,
       int totalTimedOut,
+      int totalCreationIgnored,
 
       int checkedOut,
       int maxPoolSize,
@@ -88,6 +90,7 @@ public class AsyncPoolStats implements PoolStats
     _totalDestroyErrors = totalDestroyErrors;
     _totalBadDestroyed = totalBadDestroyed;
     _totalTimedOut = totalTimedOut;
+    _totalCreationIgnored = totalCreationIgnored;
 
     _checkedOut = checkedOut;
     _maxPoolSize = maxPoolSize;
@@ -175,6 +178,17 @@ public class AsyncPoolStats implements PoolStats
   public int getTotalTimedOut()
   {
     return _totalTimedOut;
+  }
+
+  /**
+   * Get the total number of times the object creation ignored between the
+   * starting of the AsyncPool and the call to getStats().
+   * @return The total number of times the object creation ignored
+   */
+  @Override
+  public int getTotalCreationIgnored()
+  {
+    return _totalCreationIgnored;
   }
 
   /**

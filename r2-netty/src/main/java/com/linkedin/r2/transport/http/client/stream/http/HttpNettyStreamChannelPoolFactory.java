@@ -27,6 +27,7 @@ import com.linkedin.util.clock.SystemClock;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -51,6 +52,7 @@ public class HttpNettyStreamChannelPoolFactory implements ChannelPoolFactory
   private final ChannelGroup _allChannels;
   private final ScheduledExecutorService _scheduler;
   private final int _maxConcurrentConnectionInitializations;
+  private static final int DEFAULT_CONNECT_TIMEOUT = 1000;
 
   public HttpNettyStreamChannelPoolFactory(int maxPoolSize,
                                            long idleTimeout,
@@ -74,6 +76,7 @@ public class HttpNettyStreamChannelPoolFactory implements ChannelPoolFactory
 
     Bootstrap bootstrap = new Bootstrap().group(eventLoopGroup)
       .channel(NioSocketChannel.class)
+      .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, DEFAULT_CONNECT_TIMEOUT)
       .handler(initializer);
 
     _bootstrap = bootstrap;
